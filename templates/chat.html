@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ChatGPT Clone</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="chat-page">
+
+<div class="sidebar">
+
+    <a href="{% url 'new_chat' %}">
+        <button class="new-chat-btn">+ New Chat</button>
+    </a>
+
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button class="new-chat-btn" style="background:#e74c3c; margin-top:10px;">
+            Logout
+        </button>
+    </form>
+
+    <hr>
+
+    {% for chat in all_chats %}
+        <a href="{% url 'chat_detail' chat.id %}">
+            {{ chat.title }}
+        </a>
+    {% endfor %}
+
+</div>
+
+<div class="main">
+
+    <div class="header">
+       <div class="logo">
+        🤖 ChatGPT Clone
+    </div>
+
+    <div class="header-right">
+        AI Assistant
+    </div>
+</div>
+
+    <div class="chat-box">
+
+    <div class="messages">
+
+        {% for message in messages %}
+
+            {% if message.role == "user" %}
+
+                <div class="message user">
+
+                    <div class="message-role">
+                        You
+                    </div>
+
+                    <div class="message-content">
+                        {{ message.content|safe }}
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <div class="message assistant">
+
+                    <div class="message-role">
+                        AI Assistant
+                    </div>
+
+                    <div class="message-content">
+                        {{ message.content|safe }}
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" style="display:none; text-align:center; padding:10px;">
+        <p>🤖 Assistant is thinking...</p>
+    </div>
+
+    <form method="POST" class="input-box" id="chat-form">
+        {% csrf_token %}
+    <textarea
+        name="message"
+        id="message-input"
+        placeholder="Type your message..."
+        required
+    ></textarea>
+        <button type="submit" id="send-btn">Send</button>
+    </form>
+
+</div>
+
+<script>
+const form = document.getElementById("chat-form");
+const loading = document.getElementById("loading");
+const sendBtn = document.getElementById("send-btn");
+const chatBox = document.querySelector(".chat-box");
+const messageInput = document.getElementById("message-input");
+
+chatBox.scrollTop = chatBox.scrollHeight;
+
+form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    loading.style.display = "block";
+    sendBtn.disabled = true;
+    sendBtn.innerText = "Sending...";
+
+    try {
+        const response = await fetch(window.location.href, {
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+
+            document.querySelector(".messages").innerHTML += `
+    <div class="message user">
+        <div class="message-role">You</div>
+        <div class="message-content">
+            ${data.user_message}
+        </div>
+    </div>
+
+    <div class="message assistant">
+        <div class="message-role">AI Assistant</div>
+        <div class="message-content">
+            ${data.assistant_reply}
+        </div>
+    </div>
+`;
+
+            messageInput.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+    } catch (error) {
+        alert("Something went wrong!");
+    }
+
+    loading.style.display = "none";
+    sendBtn.disabled = false;
+    sendBtn.innerText = "Send";
+});
+
+messageInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        form.requestSubmit();
+    }
+});
+</script>
+
+</body>
+</html

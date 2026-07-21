@@ -1,0 +1,537 @@
+/* =========================================================
+   2026 AI CHAT DESIGN SYSTEM - PART 1
+   Login & Signup UI
+========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+
+    --bg:#0b1220;
+    --card:#111827;
+    --card2:#182233;
+    --border:#293548;
+
+    --primary:#10A37F;
+    --primary-hover:#0d8c6d;
+
+    --text:#F8FAFC;
+    --text-light:#94A3B8;
+
+    --danger:#ef4444;
+
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+}
+
+/* =========================================================
+   LOGIN & SIGNUP PAGE
+========================================================= */
+
+body:not(.chat-page){
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:
+    radial-gradient(circle at top,#243b55,#0b1220 75%);
+}
+
+.signup-card{
+
+    width:430px;
+
+    max-width:92%;
+
+    background:rgba(17,24,39,.92);
+
+    border:1px solid var(--border);
+
+    border-radius:24px;
+
+    padding:45px;
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:
+    0 25px 70px rgba(0,0,0,.45);
+
+}
+
+.signup-card h2{
+
+    color:white;
+
+    text-align:center;
+
+    font-size:34px;
+
+    margin-bottom:35px;
+
+}
+
+.signup-card input{
+
+    width:100%;
+
+    padding:15px;
+
+    background:#0f172a;
+
+    color:white;
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    margin-bottom:18px;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+.signup-card input::placeholder{
+
+    color:#94a3b8;
+
+}
+
+.signup-card input:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+    box-shadow:
+    0 0 0 4px rgba(16,163,127,.18);
+
+}
+
+.password-box{
+
+    position:relative;
+
+}
+
+.password-box button{
+
+    position:absolute;
+
+    right:16px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    background:none;
+
+    border:none;
+
+    color:#94a3b8;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+}
+
+.signup-card button[type="submit"]{
+
+    width:100%;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:var(--primary);
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.signup-card button[type="submit"]:hover{
+
+    background:var(--primary-hover);
+
+    transform:translateY(-2px);
+
+}
+
+.signup-card p{
+
+    text-align:center;
+
+    color:var(--text-light);
+
+    margin-top:22px;
+
+}
+
+.signup-card a{
+
+    color:var(--primary);
+
+    font-weight:600;
+
+    text-decoration:none;
+
+}
+
+.error-box{
+
+    background:rgba(239,68,68,.12);
+
+    border:1px solid rgba(239,68,68,.35);
+
+    color:#fecaca;
+
+    padding:15px;
+
+    border-radius:14px;
+
+    margin-bottom:22px;
+
+}
+
+input::-ms-reveal,
+input::-ms-clear{
+    display:none;
+}
+/* ==========================================
+   CHAT PAGE
+========================================== */
+
+body.chat-page{
+
+    background:#0B1220;
+
+    color:white;
+
+    display:flex;
+
+    height:100vh;
+
+    overflow:hidden;
+
+}
+
+/* ================= Sidebar ================= */
+
+.sidebar{
+
+    width:280px;
+
+    background:#111827;
+
+    border-right:1px solid #263447;
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:20px;
+
+    overflow-y:auto;
+
+}
+
+.sidebar hr{
+
+    border:none;
+
+    border-top:1px solid #293548;
+
+    margin:20px 0;
+
+}
+
+.sidebar a{
+
+    color:#CBD5E1;
+
+    text-decoration:none;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    margin-bottom:8px;
+
+    transition:.25s;
+
+}
+
+.sidebar a:hover{
+
+    background:#1E293B;
+
+    color:white;
+
+}
+
+.new-chat-btn{
+
+    width:100%;
+
+    border:none;
+
+    background:#10A37F;
+
+    color:white;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.new-chat-btn:hover{
+
+    background:#0d8c6d;
+
+}
+
+/* ================= Main ================= */
+
+.main{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    overflow:hidden;
+
+}
+
+/* ================= Header ================= */
+
+.header{
+
+    height:70px;
+
+    padding:0 35px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#111827;
+
+    border-bottom:1px solid #293548;
+
+}
+
+.logo{
+
+    font-size:22px;
+
+    font-weight:700;
+
+}
+
+.header-right{
+
+    color:#94A3B8;
+
+}
+
+/* ================= Chat ================= */
+
+.chat-box{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:40px;
+
+}
+
+.messages{
+
+    max-width:900px;
+
+    margin:auto;
+
+}
+
+/* ================= Messages ================= */
+
+.message{
+
+    padding:22px;
+
+    border-radius:20px;
+
+    margin-bottom:22px;
+
+    animation:fadeIn .35s;
+
+}
+
+.message-role{
+
+    font-size:13px;
+
+    color:#94A3B8;
+
+    margin-bottom:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.08em;
+
+}
+
+.assistant{
+
+    background:#182233;
+
+}
+
+.user{
+
+    background:#10A37F;
+
+    margin-left:120px;
+
+}
+
+/* ================= Input ================= */
+
+.input-box{
+
+    background:#111827;
+
+    padding:20px;
+
+    border-top:1px solid #293548;
+
+    display:flex;
+
+    gap:15px;
+
+}
+
+.input-box textarea{
+
+    flex:1;
+
+    resize:none;
+
+    height:60px;
+
+    border:none;
+
+    outline:none;
+
+    background:#182233;
+
+    color:white;
+
+    border-radius:16px;
+
+    padding:18px;
+
+    font-size:15px;
+
+}
+
+.input-box button{
+
+    width:130px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:#10A37F;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:600;
+
+}
+
+.input-box button:hover{
+
+    background:#0d8c6d;
+
+}
+
+/* ================= Loading ================= */
+
+#loading{
+
+    color:#94A3B8;
+
+    text-align:center;
+
+    padding:12px;
+
+}
+
+/* ================= Animation ================= */
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(15px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
