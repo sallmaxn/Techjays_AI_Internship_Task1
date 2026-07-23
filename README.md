@@ -133,25 +133,25 @@ Each authenticated user can create multiple chat sessions. Every chat session st
 
 ## 🔑 Login Page
 
-![Login](screenshots/login.png)
+![Login](screenshot/login.png)
 
 ---
 
 ## 📝 Signup Page
 
-![Signup](screenshots/signup.png)
+![Signup](screenshot/signup.png)
 
 ---
 
 ## 💬 Chat Interface
 
-![Chat](screenshots/chat.png)
+![Chat](screenshot/chat.png)
 
 ---
 
 ## 📚 Chat History
 
-![History](screenshots/history.png)
+![History](screenshot/history.png)
 
 ---
 
