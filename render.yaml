@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: techjays-ai-chatbot
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn core.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DEBUG
+        value: "False"

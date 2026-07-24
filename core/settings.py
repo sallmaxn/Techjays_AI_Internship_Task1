@@ -24,12 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1lfd-q11u8a%dwxmx&(_m(@aq@y0q3gy4-22!g@^e5jy=*xr#*'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "on.render.com",
+    "127.0.0.1",
+    "localhost",
+]
 
 
 # Application definition
@@ -124,6 +128,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
+]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.onrender.com",
 ]
 LOGIN_REDIRECT_URL = "/chat/"
 LOGOUT_REDIRECT_URL = "/login/"
