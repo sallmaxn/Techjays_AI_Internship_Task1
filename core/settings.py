@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
-    "on.render.com",
+    "techjays-ai-internship-task1.onrender.com",
     "127.0.0.1",
     "localhost",
 ]
