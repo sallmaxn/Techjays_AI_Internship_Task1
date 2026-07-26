@@ -71,53 +71,33 @@ class ChatTests(TestCase):
         """Test sending a message."""
 
         mock_create.return_value = SimpleNamespace(
-            choices=[
-                SimpleNamespace(
-                    message=SimpleNamespace(
-                        content="Hello from AI"
-                    )
-                )
-            ]
+            choices=[SimpleNamespace(message=SimpleNamespace(content="Hello from AI"))]
         )
 
         response = self.client.post(
             reverse("chat"),
-            {
-                "message": "Hi AI"
-            },
+            {"message": "Hi AI"},
             HTTP_X_REQUESTED_WITH="XMLHttpRequest",
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Message.objects.count(), 2)
 
-        self.assertTrue(
-            Message.objects.filter(role="user").exists()
-        )
+        self.assertTrue(Message.objects.filter(role="user").exists())
 
-        self.assertTrue(
-            Message.objects.filter(role="assistant").exists()
-        )
+        self.assertTrue(Message.objects.filter(role="assistant").exists())
 
     @patch("chat.views.client.chat.completions.create")
     def test_chat_title_updates(self, mock_create):
         """Title updates after first message."""
 
         mock_create.return_value = SimpleNamespace(
-            choices=[
-                SimpleNamespace(
-                    message=SimpleNamespace(
-                        content="AI Reply"
-                    )
-                )
-            ]
+            choices=[SimpleNamespace(message=SimpleNamespace(content="AI Reply"))]
         )
 
         self.client.post(
             reverse("chat"),
-            {
-                "message": "Python Basics"
-            },
+            {"message": "Python Basics"},
             HTTP_X_REQUESTED_WITH="XMLHttpRequest",
         )
 

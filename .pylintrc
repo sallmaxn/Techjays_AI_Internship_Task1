@@ -1,0 +1,6 @@
+[MASTER]
+load-plugins=pylint_django
+ignore-paths=^.*/migrations/.*$
+
+[MESSAGES CONTROL]
+disable=django-not-configured,imported-auth-user,missing-module-docstring,missing-class-docstring,missing-function-docstring,duplicate-code,unused-importinvalid-name,no-else-return

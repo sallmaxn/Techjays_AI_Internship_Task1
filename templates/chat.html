@@ -1,175 +1,119 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>ChatGPT Clone</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#101113">
+    <title>Chat · AI Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body class="chat-page">
-
-<div class="sidebar">
-
-    <a href="{% url 'new_chat' %}">
-        <button class="new-chat-btn">+ New Chat</button>
-    </a>
-
-    <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button class="new-chat-btn" style="background:#e74c3c; margin-top:10px;">
-            Logout
-        </button>
-    </form>
-
-    <hr>
-
-    {% for chat in all_chats %}
-        <a href="{% url 'chat_detail' chat.id %}">
-            {{ chat.title }}
-        </a>
-    {% endfor %}
-
-</div>
-
-<div class="main">
-
-    <div class="header">
-       <div class="logo">
-        🤖 ChatGPT Clone
-    </div>
-
-    <div class="header-right">
-        AI Assistant
-    </div>
-</div>
-
-    <div class="chat-box">
-
-    <div class="messages">
-
-        {% for message in messages %}
-
-            {% if message.role == "user" %}
-
-                <div class="message user">
-
-                    <div class="message-role">
-                        You
+<div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Chat navigation">
+        <div class="sidebar-top">
+            <a href="{% url 'chat' %}" class="brand"><span class="brand-mark">✦</span><span>AI Assistant</span></a>
+            <button class="sidebar-close" type="button" id="sidebar-close" aria-label="Close menu">×</button>
+        </div>
+        <a href="{% url 'new_chat' %}" class="new-chat-btn"><span aria-hidden="true">＋</span> New conversation</a>
+        <div class="history-heading"><span>Recent conversations</span></div>
+        <nav class="chat-history" aria-label="Recent conversations">
+            {% for chat in all_chats %}
+                <a href="{% url 'chat_detail' chat.id %}" class="history-item {% if chat.id == current_chat.id %}active{% endif %}" title="{{ chat.title }}">
+                    <span class="history-icon" aria-hidden="true">◇</span><span>{{ chat.title }}</span>
+                </a>
+            {% empty %}
+                <p class="empty-history">Your conversations will appear here.</p>
+            {% endfor %}
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="profile"><span class="avatar">{{ request.user.username|first|upper }}</span><span class="profile-name">{{ request.user.username }}</span></div>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button class="logout-btn" type="submit"><span aria-hidden="true">↪</span><span>Log out</span></button>
+            </form>
+        </div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+    <main class="main">
+        <header class="header">
+            <button class="menu-toggle" type="button" id="menu-toggle" aria-label="Open menu"><span></span><span></span></button>
+            <div class="conversation-title"><span class="status-dot"></span><span>AI Assistant</span><span class="header-subtitle">Ready to help</span></div>
+            <div class="header-actions"><span class="secure-label">✦ Private workspace</span></div>
+        </header>
+        <section class="chat-box" aria-live="polite">
+            <div class="messages">
+                {% for message in messages %}
+                    {% if message.role == "user" %}
+                        <article class="message user">
+                            <div class="message-meta"><span class="avatar user-avatar">{{ request.user.username|first|upper }}</span><span>You</span></div>
+                            <div class="message-content">{{ message.content|safe }}</div>
+                        </article>
+                    {% else %}
+                        <article class="message assistant">
+                            <div class="message-meta"><span class="assistant-avatar">✦</span><span>AI Assistant</span></div>
+                            <div class="message-content">{{ message.content|safe }}</div>
+                        </article>
+                    {% endif %}
+                {% empty %}
+                    <div class="welcome-state">
+                        <span class="welcome-mark">✦</span><p class="eyebrow">AI ASSISTANT</p><h1>How can I help today?</h1><p>Ask a question, brainstorm an idea, or get help with your next task.</p>
                     </div>
-
-                    <div class="message-content">
-                        {{ message.content|safe }}
-                    </div>
-
-                </div>
-
-            {% else %}
-
-                <div class="message assistant">
-
-                    <div class="message-role">
-                        AI Assistant
-                    </div>
-
-                    <div class="message-content">
-                        {{ message.content|safe }}
-                    </div>
-
-                </div>
-
-            {% endif %}
-
-        {% endfor %}
-
-    </div>
-
+                {% endfor %}
+            </div>
+        </section>
+        <div id="loading" class="loading" style="display:none;" role="status"><span class="thinking-dots"><i></i><i></i><i></i></span> AI Assistant is thinking</div>
+        <div class="composer-wrap">
+            <form method="POST" class="input-box" id="chat-form">
+                {% csrf_token %}
+                <textarea name="message" id="message-input" placeholder="Message AI Assistant..." aria-label="Message AI Assistant" required rows="1"></textarea>
+                <button type="submit" id="send-btn" aria-label="Send message"><span aria-hidden="true">↑</span></button>
+            </form>
+            <p class="composer-note">AI Assistant can make mistakes. Check important information.</p>
+        </div>
+    </main>
 </div>
-
-    <!-- Loading Spinner -->
-    <div id="loading" style="display:none; text-align:center; padding:10px;">
-        <p>🤖 Assistant is thinking...</p>
-    </div>
-
-    <form method="POST" class="input-box" id="chat-form">
-        {% csrf_token %}
-    <textarea
-        name="message"
-        id="message-input"
-        placeholder="Type your message..."
-        required
-    ></textarea>
-        <button type="submit" id="send-btn">Send</button>
-    </form>
-
-</div>
-
 <script>
-const form = document.getElementById("chat-form");
-const loading = document.getElementById("loading");
-const sendBtn = document.getElementById("send-btn");
-const chatBox = document.querySelector(".chat-box");
-const messageInput = document.getElementById("message-input");
+const form = document.getElementById('chat-form');
+const loading = document.getElementById('loading');
+const sendBtn = document.getElementById('send-btn');
+const chatBox = document.querySelector('.chat-box');
+const messageInput = document.getElementById('message-input');
+const sidebar = document.getElementById('sidebar');
+const backdrop = document.getElementById('sidebar-backdrop');
+const menuToggle = document.getElementById('menu-toggle');
+const closeSidebar = document.getElementById('sidebar-close');
+const userInitial = '{{ request.user.username|first|upper|escapejs }}';
 
 chatBox.scrollTop = chatBox.scrollHeight;
-
-form.addEventListener("submit", async function (e) {
+function setSidebar(open) { sidebar.classList.toggle('is-open', open); backdrop.classList.toggle('is-open', open); }
+menuToggle.addEventListener('click', () => setSidebar(true));
+closeSidebar.addEventListener('click', () => setSidebar(false));
+backdrop.addEventListener('click', () => setSidebar(false));
+function resizeInput() { messageInput.style.height = 'auto'; messageInput.style.height = Math.min(messageInput.scrollHeight, 160) + 'px'; }
+messageInput.addEventListener('input', resizeInput);
+form.addEventListener('submit', async function (e) {
     e.preventDefault();
-
     const formData = new FormData(form);
-
-    loading.style.display = "block";
-    sendBtn.disabled = true;
-    sendBtn.innerText = "Sending...";
-
+    if (!messageInput.value.trim()) return;
+    loading.style.display = 'flex'; sendBtn.disabled = true; sendBtn.innerHTML = '<span aria-hidden="true">•••</span>';
     try {
-        const response = await fetch(window.location.href, {
-            method: "POST",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            body: formData
-        });
-
+        const response = await fetch(window.location.href, { method: 'POST', headers: {'X-Requested-With': 'XMLHttpRequest'}, body: formData });
         const data = await response.json();
-
         if (data.success) {
-
-            document.querySelector(".messages").innerHTML += `
-    <div class="message user">
-        <div class="message-role">You</div>
-        <div class="message-content">
-            ${data.user_message}
-        </div>
-    </div>
-
-    <div class="message assistant">
-        <div class="message-role">AI Assistant</div>
-        <div class="message-content">
-            ${data.assistant_reply}
-        </div>
-    </div>
-`;
-
-            messageInput.value = "";
-            chatBox.scrollTop = chatBox.scrollHeight;
+            const welcome = document.querySelector('.welcome-state'); if (welcome) welcome.remove();
+            document.querySelector('.messages').insertAdjacentHTML('beforeend', `<article class="message user"><div class="message-meta"><span class="avatar user-avatar">${userInitial}</span><span>You</span></div><div class="message-content"></div></article><article class="message assistant"><div class="message-meta"><span class="assistant-avatar">✦</span><span>AI Assistant</span></div><div class="message-content">${data.assistant_reply}</div></article>`);
+            const userMessages = document.querySelectorAll('.messages .message.user');
+            userMessages[userMessages.length - 1].querySelector('.message-content').textContent = data.user_message;
+            messageInput.value = ''; resizeInput(); chatBox.scrollTop = chatBox.scrollHeight;
         }
-
-    } catch (error) {
-        alert("Something went wrong!");
-    }
-
-    loading.style.display = "none";
-    sendBtn.disabled = false;
-    sendBtn.innerText = "Send";
+    } catch (error) { alert('Something went wrong!'); }
+    loading.style.display = 'none'; sendBtn.disabled = false; sendBtn.innerHTML = '<span aria-hidden="true">↑</span>';
 });
-
-messageInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        form.requestSubmit();
-    }
-});
+messageInput.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
 </script>
-
 </body>
-</html
+</html>
