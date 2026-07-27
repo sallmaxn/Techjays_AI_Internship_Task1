@@ -160,13 +160,15 @@ Each authenticated user can create multiple chat sessions. Every chat session st
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY.git
+git clone https://github.com/sallmaxn/Techjays_AI_Internship_Task1.git
+
 ```
 
 ## Navigate to the Project
 
 ```bash
-cd YOUR_REPOSITORY
+cd Techjays_AI_Internship_Task1
+
 ```
 
 ## Create a Virtual Environment
