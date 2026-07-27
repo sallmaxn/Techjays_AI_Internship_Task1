@@ -133,25 +133,29 @@ Each authenticated user can create multiple chat sessions. Every chat session st
 
 ## 🔑 Login Page
 
-![Login](screenshot/login.png)
+<img width="1366" height="623" alt="Screenshot (8)" src="https://github.com/user-attachments/assets/12875fc2-72a7-417a-b1dc-04353a41028e" />
+
 
 ---
 
 ## 📝 Signup Page
 
-![Signup](screenshot/signup.png)
+<img width="1366" height="637" alt="Screenshot (9)" src="https://github.com/user-attachments/assets/afec2813-e735-4d1d-9990-13c9eadd19b5" />
+
 
 ---
 
 ## 💬 Chat Interface
 
-![Chat](screenshot/chat.png)
+<img width="1366" height="630" alt="Screenshot (10)" src="https://github.com/user-attachments/assets/100fd859-36a2-4923-b45e-e1cae05c6fb6" />
+
 
 ---
 
 ## 📚 Chat History
 
-![History](screenshot/history.png)
+<img width="1366" height="645" alt="Screenshot (11)" src="https://github.com/user-attachments/assets/739b067c-be1f-4ff2-a23d-6f83d3d792f8" />
+
 
 ---
 
